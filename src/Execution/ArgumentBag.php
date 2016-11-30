@@ -9,7 +9,7 @@
 
 namespace Youshido\GraphQL\Execution;
 
-class ArgumentBag implements \IteratorAggregate, \Countable
+class ArgumentBag implements \IteratorAggregate, \ArrayAccess, \Countable
 {
     private $arguments = [];
 
@@ -41,5 +41,25 @@ class ArgumentBag implements \IteratorAggregate, \Countable
     public function count()
     {
         return count($this->arguments);
+    }
+    
+    public function offsetExists($offset)
+    {
+        return isset($this->arguments[$offset]);
+    }
+    
+    public function offsetGet($offset)
+    {
+        return $this->offsetExists($offset) ? $this->arguments[$offset] : null;
+    }
+    
+    public function offsetSet($offset, $value)
+    {
+        return $this->arguments[$argument] = $value;
+    }
+    
+    public function offsetUnset($offset)
+    {
+        unset($this->attributes[$offset]);
     }
 }

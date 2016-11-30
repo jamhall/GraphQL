@@ -11,6 +11,7 @@ namespace Youshido\GraphQL\Relay\Field;
 
 use Youshido\GraphQL\Config\Field\FieldConfig;
 use Youshido\GraphQL\Execution\ResolveInfo;
+use Youshido\GraphQL\Execution\ArgumentBag;
 use Youshido\GraphQL\Field\AbstractField;
 use Youshido\GraphQL\Field\InputField;
 use Youshido\GraphQL\Relay\Fetcher\FetcherInterface;
@@ -60,7 +61,7 @@ class NodeField extends AbstractField
         return $this->type;
     }
 
-    public function resolve($value, array $args, ResolveInfo $info)
+    public function resolve($value, ArgumentBag $args, ResolveInfo $info)
     {
         list($type, $id) = Node::fromGlobalId($args['id']);
 

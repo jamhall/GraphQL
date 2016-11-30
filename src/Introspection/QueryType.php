@@ -20,6 +20,7 @@ use Youshido\GraphQL\Type\Object\AbstractObjectType;
 use Youshido\GraphQL\Type\Scalar\BooleanType;
 use Youshido\GraphQL\Type\TypeMap;
 use Youshido\GraphQL\Type\Union\AbstractUnionType;
+use Youshido\GraphQL\Execution\ArgumentBag;
 
 class QueryType extends AbstractObjectType
 {
@@ -53,13 +54,13 @@ class QueryType extends AbstractObjectType
         return null;
     }
 
-    public function resolveEnumValues($value, $args)
+    public function resolveEnumValues($value, ArgumentBag $args)
     {
         /** @var $value AbstractType|AbstractEnumType */
         if ($value && $value->getKind() == TypeMap::KIND_ENUM) {
             $data = [];
             foreach ($value->getValues() as $enumValue) {
-                if(!$args['includeDeprecated'] && (isset($enumValue['isDeprecated']) && $enumValue['isDeprecated'])) {
+                if(!$args->has('includeDeprecated') && (isset($enumValue['isDeprecated']) && $enumValue['isDeprecated'])) {
                     continue;
                 }
 
@@ -82,7 +83,7 @@ class QueryType extends AbstractObjectType
         return null;
     }
 
-    public function resolveFields($value, $args)
+    public function resolveFields($value, ArgumentBag $args)
     {
         /** @var AbstractType $value */
         if (!$value ||
@@ -94,7 +95,7 @@ class QueryType extends AbstractObjectType
         /** @var AbstractObjectType $value */
         return array_filter($value->getConfig()->getFields(), function ($field) use ($args) {
             /** @var $field Field */
-            if (in_array($field->getName(), ['__type', '__schema']) || (!$args['includeDeprecated'] && $field->isDeprecated())) {
+            if (in_array($field->getName(), ['__type', '__schema']) || (!$args->has('includeDeprecated') && $field->isDeprecated())) {
                 return false;
             }
 
@@ -113,7 +114,7 @@ class QueryType extends AbstractObjectType
         return null;
     }
 
-    public function resolvePossibleTypes($value, $args, ResolveInfo $info)
+    public function resolvePossibleTypes($value, ArgumentBag $args, ResolveInfo $info)
     {
         /** @var $value AbstractObjectType */
         if ($value->getKind() == TypeMap::KIND_INTERFACE) {

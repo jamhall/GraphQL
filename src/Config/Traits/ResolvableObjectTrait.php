@@ -10,11 +10,12 @@ namespace Youshido\GraphQL\Config\Traits;
 use Youshido\GraphQL\Execution\ResolveInfo;
 use Youshido\GraphQL\Type\TypeMap;
 use Youshido\GraphQL\Type\TypeService;
+use Youshido\GraphQL\Execution\ArgumentBag;
 
 trait ResolvableObjectTrait
 {
 
-    public function resolve($value, array $args, ResolveInfo $info)
+    public function resolve($value, ArgumentBag $args, ResolveInfo $info)
     {
         if ($resolveFunction = $this->getConfig()->getResolveFunction()) {
             return $resolveFunction($value, $args, $info);

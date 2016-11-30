@@ -16,13 +16,14 @@ use Youshido\GraphQL\Introspection\Traits\TypeCollectorTrait;
 use Youshido\GraphQL\Type\NonNullType;
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
 use Youshido\GraphQL\Type\Scalar\StringType;
+use Youshido\GraphQL\Execution\ArgumentBag;
 
 class TypeDefinitionField extends AbstractField
 {
 
     use TypeCollectorTrait;
 
-    public function resolve($value = null, array $args, ResolveInfo $info)
+    public function resolve($value = null, ArgumentBag $args, ResolveInfo $info)
     {
         $schema = $info->getExecutionContext()->getSchema();
         $this->collectTypes($schema->getQueryType());
@@ -33,7 +34,7 @@ class TypeDefinitionField extends AbstractField
         }
 
         foreach ($this->types as $name => $info) {
-            if ($name == $args['name']) {
+            if ($name == $args->get('name')) {
                 return $info;
             }
         }

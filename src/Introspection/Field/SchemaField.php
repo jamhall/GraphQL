@@ -9,6 +9,7 @@ namespace Youshido\GraphQL\Introspection\Field;
 
 
 use Youshido\GraphQL\Execution\ResolveInfo;
+use Youshido\GraphQL\Execution\ArgumentBag;
 use Youshido\GraphQL\Field\AbstractField;
 use Youshido\GraphQL\Introspection\SchemaType;
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
@@ -28,7 +29,7 @@ class SchemaField extends AbstractField
         return '__schema';
     }
 
-    public function resolve($value, array $args, ResolveInfo $info)
+    public function resolve($value, ArgumentBag $args, ResolveInfo $info)
     {
         return $info->getExecutionContext()->getSchema();
     }

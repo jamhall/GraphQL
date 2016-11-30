@@ -3,6 +3,7 @@
 namespace Youshido\Tests\Schema;
 
 use Youshido\GraphQL\Execution\Processor;
+use Youshido\GraphQL\Execution\ArgumentBag;
 use Youshido\GraphQL\Schema\Schema;
 use Youshido\GraphQL\Type\Object\ObjectType;
 use Youshido\GraphQL\Type\Scalar\DateTimeType;
@@ -30,10 +31,10 @@ class InputParseTest extends \PHPUnit_Framework_TestCase
                             'from'   => new DateTimeType(),
                             'fromtz' => new DateTimeTzType(),
                         ],
-                        'resolve' => function ($source, $args) {
+                        'resolve' => function ($source, ArgumentBag $args) {
                             return sprintf('Result with %s date and %s tz',
-                                empty($args['from']) ? 'default' : $args['from'],
-                                empty($args['fromtz']) ? 'default' : $args['fromtz']
+                                $args->get('from', 'default'),
+                                $args->get('fromtz', 'default')
                             );
                         },
                     ],

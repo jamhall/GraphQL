@@ -12,6 +12,7 @@ use Youshido\GraphQL\Field\Field;
 use Youshido\GraphQL\Field\FieldFactory;
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
 use Youshido\GraphQL\Type\Scalar\IdType;
+use Youshido\GraphQL\Execution\ArgumentBag;
 
 class StarWarsQueryType extends AbstractObjectType
 {
@@ -32,8 +33,8 @@ class StarWarsQueryType extends AbstractObjectType
                 'args'    => [
                     'episode' => ['type' => new EpisodeEnum()]
                 ],
-                'resolve' => function ($root, $args) {
-                    return StarWarsData::getHero(isset($args['episode']) ? $args['episode'] : null);
+                'resolve' => function ($root, ArgumentBag $args) {
+                    return StarWarsData::getHero($args->get('episode', null));
                 },
             ])
             ->addField(new Field([
@@ -42,10 +43,9 @@ class StarWarsQueryType extends AbstractObjectType
                 'args'    => [
                     'id' => new IdType()
                 ],
-                'resolve' => function ($value = null, $args = []) {
+                'resolve' => function ($value = null, ArgumentBag $args) {
                     $humans = StarWarsData::humans();
-
-                    return isset($humans[$args['id']]) ? $humans[$args['id']] : null;
+                    return $args->has('id') ? $humans[$args->get('id')] : null;
                 }
             ]))
             ->addField(new Field([
@@ -54,10 +54,9 @@ class StarWarsQueryType extends AbstractObjectType
                 'args'    => [
                     'id' => new IdType()
                 ],
-                'resolve' => function ($value = null, $args = []) {
+                'resolve' => function ($value = null, ArgumentBag $args) {
                     $droids = StarWarsData::droids();
-
-                    return isset($droids[$args['id']]) ? $droids[$args['id']] : null;
+                    return $args->has('id') ? $droids[$args->get('id')] : null;
                 }
             ]));
     }

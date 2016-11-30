@@ -38,6 +38,7 @@ use Youshido\GraphQL\Type\Union\AbstractUnionType;
 use Youshido\GraphQL\Validator\RequestValidator\RequestValidator;
 use Youshido\GraphQL\Validator\ResolveValidator\ResolveValidator;
 use Youshido\GraphQL\Validator\ResolveValidator\ResolveValidatorInterface;
+use Youshido\GraphQL\Execution\ArgumentBag;
 
 class Processor
 {
@@ -513,6 +514,7 @@ class Processor
 
     protected function parseArgumentsValues(FieldInterface $field, AstFieldInterface $ast)
     {
+        $bag = new ArgumentBag();
         $values   = [];
         $defaults = [];
 
@@ -534,7 +536,8 @@ class Processor
             }
         }
 
-        return array_merge($values, $defaults);
+        $bag->add(array_merge($values, $defaults));
+        return $bag;
     }
 
     private function getAlias(AstFieldInterface $ast)

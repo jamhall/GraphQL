@@ -10,6 +10,7 @@ namespace Youshido\GraphQL\Relay\Field;
 
 
 use Youshido\GraphQL\Execution\ResolveInfo;
+use Youshido\GraphQL\Execution\ArgumentBag;
 use Youshido\GraphQL\Field\AbstractField;
 use Youshido\GraphQL\Relay\Node;
 use Youshido\GraphQL\Type\NonNullType;
@@ -55,7 +56,7 @@ class GlobalIdField extends AbstractField
     /**
      * @inheritdoc
      */
-    public function resolve($value, array $args, ResolveInfo $info)
+    public function resolve($value, ArgumentBag $args, ResolveInfo $info)
     {
         return $value ? Node::toGlobalId($this->typeName, $value['id']) : null;
     }

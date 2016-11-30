@@ -30,6 +30,7 @@ use Youshido\Tests\DataProvider\TestEnumType;
 use Youshido\Tests\DataProvider\TestInterfaceType;
 use Youshido\Tests\DataProvider\TestObjectType;
 use Youshido\Tests\DataProvider\TestSchema;
+use Youshido\GraphQL\Execution\ArgumentBag;
 
 class ProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -142,8 +143,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
                                     'args'    => [
                                         'shorten' => new BooleanType()
                                     ],
-                                    'resolve' => function ($value, $args) {
-                                        return empty($args['shorten']) ? $value['firstName'] : $value['firstName'];
+                                    'resolve' => function ($value, ArgumentBag $args) {
+                                        return $value['firstName'];
                                     }
                                 ],
                                 'id_alias'  => [
@@ -156,9 +157,9 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
                                 'code'      => new StringType(),
                             ]
                         ]),
-                        'resolve' => function ($value, $args) {
+                        'resolve' => function ($value, ArgumentBag $args) {
                             $data = ['id' => '123', 'firstName' => 'John', 'code' => '007'];
-                            if (!empty($args['upper'])) {
+                            if ($args->get('upper')) {
                                 foreach ($data as $key => $value) {
                                     $data[$key] = strtoupper($value);
                                 }
@@ -224,8 +225,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->addField(new Field([
                 'name'    => 'increaseCounter',
                 'type'    => new IntType(),
-                'resolve' => function ($value, $args, ResolveInfo $info) {
-                    return $this->_counter += $args['amount'];
+                'resolve' => function ($value, ArgumentBag $args, ResolveInfo $info) {
+                    return $this->_counter += $args->get('amount');
                 },
                 'args'    => [
                     'amount' => [
@@ -371,8 +372,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
                             ]))
                         ],
                         'type'    => new StringType(),
-                        'resolve' => function ($value, $args) {
-                            return $args['argument1'];
+                        'resolve' => function ($value, ArgumentBag $args) {
+                            return $args->get('argument1');
                         }
                     ]
                 ]
@@ -579,8 +580,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
                             'type' => ['type' => 'string']
                         ],
                         'cost'    => 10,
-                        'resolve' => function ($value, $args) {
-                            if ($args['type'] == 'object1') {
+                        'resolve' => function ($value, ArgumentBag $args) {
+                            if ($args->get('type') == 'object1') {
                                 return [
                                     'id' => 43
                                 ];
@@ -697,7 +698,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
                                                 'args'    => [
                                                     'shorten' => new BooleanType()
                                                 ],
-                                                'resolve' => function ($value, $args) {
+                                                'resolve' => function ($value, ArgumentBag $args) {
+                                                    return $value['firstName'];
                                                     return empty($args['shorten']) ? $value['firstName'] : $value['firstName'];
                                                 }
                                             ],

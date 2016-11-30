@@ -11,6 +11,7 @@ namespace Youshido\Tests\Library\Field;
 
 use Youshido\GraphQL\Config\Field\FieldConfig;
 use Youshido\GraphQL\Execution\ResolveInfo;
+use Youshido\GraphQL\Execution\ArgumentBag;
 use Youshido\GraphQL\Field\Field;
 use Youshido\GraphQL\Field\InputField;
 use Youshido\GraphQL\Type\Scalar\IdType;
@@ -33,17 +34,17 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $resolveInfo = TestResolveInfo::createTestResolveInfo($field);
         $this->assertEquals('id', $field->getName());
         $this->assertEquals(new IdType(), $field->getType());
-        $this->assertEquals(null, $field->resolve('data', [], $resolveInfo));
+        $this->assertEquals(null, $field->resolve('data', new ArgumentBag(), $resolveInfo));
 
         $fieldWithResolve = new Field([
             'name'    => 'title',
             'type'    => new StringType(),
-            'resolve' => function ($value, array $args, ResolveInfo $info) {
+            'resolve' => function ($value, ArgumentBag $args, ResolveInfo $info) {
                 return $info->getReturnType()->serialize($value);
             }
         ]);
         $resolveInfo = TestResolveInfo::createTestResolveInfo($fieldWithResolve);
-        $this->assertEquals('true', $fieldWithResolve->resolve(true, [], $resolveInfo), 'Resolve bool to string');
+        $this->assertEquals('true', $fieldWithResolve->resolve(true, new ArgumentBag(), $resolveInfo), 'Resolve bool to string');
 
         $fieldWithResolve->setType(new IntType());
         $this->assertEquals(new StringType(), $fieldWithResolve->getType()->getName());
@@ -58,7 +59,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $field->getName());
         $this->assertEquals('description', $field->getDescription());
         $this->assertEquals(new IntType(), $field->getType());
-        $this->assertEquals('test', $field->resolve('test', [], $resolveInfo));
+        $this->assertEquals('test', $field->resolve('test', new ArgumentBag(), $resolveInfo));
     }
 
     public function testArgumentsTrait()

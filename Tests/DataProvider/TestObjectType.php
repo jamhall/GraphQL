@@ -13,6 +13,7 @@ use Youshido\GraphQL\Type\Object\ObjectType;
 use Youshido\GraphQL\Type\Scalar\IntType;
 use Youshido\GraphQL\Type\Scalar\StringType;
 use Youshido\GraphQL\Type\NonNullType;
+use Youshido\GraphQL\Execution\ArgumentBag;
 
 class TestObjectType extends AbstractObjectType
 {
@@ -52,8 +53,8 @@ class TestObjectType extends AbstractObjectType
                     'args'    => [
                         'value' => new NonNullType(new StringType())
                     ],
-                    'resolve' => function ($value, $args, $info) {
-                        return $args['value'];
+                    'resolve' => function ($value, ArgumentBag $args, $info) {
+                        return $args->get('value');
                     }
                 ]
             );

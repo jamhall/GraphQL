@@ -3,6 +3,7 @@
 namespace Youshido\Tests\Schema;
 
 use Youshido\GraphQL\Execution\Processor;
+use Youshido\GraphQL\Execution\ArgumentBag;
 use Youshido\GraphQL\Schema\Schema;
 use Youshido\GraphQL\Type\Enum\EnumType;
 use Youshido\GraphQL\Type\InputObject\InputObjectType;
@@ -49,9 +50,10 @@ class InputObjectDefaultValuesTest extends \PHPUnit_Framework_TestCase
                                 ]
                             ])
                         ],
-                        'resolve' => function ($source, $args) {
+                        'resolve' => function ($source, ArgumentBag $args) {
+                            $statObject = $args->get('statObject');
                             return sprintf('Result with level %s and status %s',
-                                $args['statObject']['level'], $args['statObject']['status']
+                                $statObject['level'], $statObject['status']
                             );
                         },
                     ],

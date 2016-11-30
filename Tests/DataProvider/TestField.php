@@ -8,7 +8,6 @@
 namespace Youshido\Tests\DataProvider;
 
 use Youshido\GraphQL\Execution\ResolveInfo;
-use Youshido\GraphQL\Execution\ArgumentBag;
 use Youshido\GraphQL\Field\AbstractField;
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
 use Youshido\GraphQL\Type\Scalar\IntType;
@@ -24,7 +23,7 @@ class TestField extends AbstractField
         return new IntType();
     }
 
-    public function resolve($value, ArgumentBag $args, ResolveInfo $info)
+    public function resolve($value, $args, ResolveInfo $info)
     {
         return $value;
     }
